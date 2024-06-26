@@ -39,8 +39,8 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "watch": "webpack --watch --mode development"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode production",
+    "watch": "NODE_OPTIONS=--openssl-legacy-provider webpack --watch --mode development"
   },
   "author": "Jamie Curnow <jc@jc21.com>",
   "license": "MIT"

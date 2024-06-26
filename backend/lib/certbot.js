@@ -1,4 +1,5 @@
-const dnsPlugins = require('../global/certbot-dns-plugins.json');
+const fs         = require('fs');
+const dnsPlugins = JSON.parse(fs.readFileSync('../global/certbot-dns-plugins.json'));
 const utils      = require('./utils');
 const error      = require('./error');
 const logger     = require('../logger').certbot;
