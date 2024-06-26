@@ -23,8 +23,11 @@
                         <% if (canShow('dead_hosts')) { %>
                         <a href="/nginx/404" class="dropdown-item "><%- i18n('dead-hosts', 'title') %></a>
                         <% } %>
+                        <a class="dropdown-item "><%- i18n('VMs', 'title') %></a>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a href="/nginx/vms" class="nav-link"><i class="fe fe-map-pin"></i> <%- i18n('VMs', 'title') %></a>
                 <% if (canShow('access_lists')) { %>
                 <li class="nav-item">
                     <a href="/nginx/access" class="nav-link"><i class="fe fe-lock"></i> <%- i18n('access-lists', 'title') %></a>
@@ -34,6 +37,7 @@
                 <li class="nav-item">
                     <a href="/nginx/certificates" class="nav-link"><i class="fe fe-shield"></i> <%- i18n('certificates', 'title') %></a>
                 </li>
+                
                 <% } %>
                 <% if (isAdmin()) { %>
                 <li class="nav-item">

@@ -4,6 +4,7 @@ const fileUpload  = require('express-fileupload');
 const compression = require('compression');
 const config      = require('./lib/config');
 const log         = require('./logger').express;
+const path		= require('path');
 
 /**
  * App
@@ -12,6 +13,7 @@ const app = express();
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Gzip
 app.use(compression());
@@ -23,6 +25,7 @@ app.use(compression());
 app.disable('x-powered-by');
 app.enable('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 app.enable('strict routing');
+
 
 // pretty print JSON when not live
 if (config.debug()) {
@@ -52,7 +55,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(require('./lib/express/jwt')());
-app.use('/', require('./routes/api/main'));
+app.use('/api', require('./routes/api/main'));
 
 // production error handler
 // no stacktraces leaked to user
