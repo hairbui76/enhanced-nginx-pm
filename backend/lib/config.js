@@ -2,7 +2,7 @@ const fs      = require('fs');
 const NodeRSA = require('node-rsa');
 const logger  = require('../logger').global;
 
-const keysFile = '/data/keys.json';
+const keysFile = 'data/keys.json';
 
 let instance = null;
 
@@ -46,7 +46,7 @@ const configure = () => {
 		return;
 	}
 
-	const envSqliteFile = process.env.DB_SQLITE_FILE || '/data/database.sqlite';
+	const envSqliteFile = process.env.DB_SQLITE_FILE || 'data/database.sqlite';
 	logger.info(`Using Sqlite: ${envSqliteFile}`);
 	instance = {
 		database: {
@@ -71,7 +71,7 @@ const getKeys = () => {
 		logger.info('Keys file exists OK');
 	}
 	try {
-		return require(keysFile);
+		return JSON.parse(fs.readFileSync(keysFile, 'utf8'));
 	} catch (err) {
 		logger.error('Could not read JWT key pair from config file: ' + keysFile, err);
 		process.exit(1);
@@ -93,7 +93,7 @@ const generateKeys = () => {
 	try {
 		fs.writeFileSync(keysFile, JSON.stringify(keys, null, 2));
 	} catch (err) {
-		logger.error('Could not write JWT key pair to config file: ' + keysFile + ': ' . err.message);
+		logger.error('Could not write JWT key pair to config file: ' + keysFile + ': ' + err.message);
 		process.exit(1);
 	}
 	logger.info('Wrote JWT key pair to config file: ' + keysFile);

@@ -1,0 +1,18 @@
+{
+  "name": "enhanced-nginx-pm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+		"build:client": "cd frontend && npm run build",
+		"dev:server": "cd backend && npm start",
+		"dev": "npm run build:client && npm run dev:server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
