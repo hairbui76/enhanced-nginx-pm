@@ -135,6 +135,17 @@
       "custom-forward-host-help": "Add a path for sub-folder forwarding.\nExample: 203.0.113.25/path/",
       "search": "Search Host…"
     },
+    "vms": {
+      "title": "Virtual Machines",
+      "empty": "There are no Virtual Machines",
+      "add": "Add Virtual Machine",
+      "form-title": "{id, select, undefined{New} other{Edit}} Virtual Machine",
+      "delete": "Delete Virtual Machine",
+      "delete-confirm": "Are you sure you want to delete this Virtual Machine?",
+      "help-title": "What is a Virtual Machine?",
+      "help-content": "A Virtual Machine is a special type of Proxy Host that is used to forward traffic to a virtual machine on the same host as Nginx Proxy Manager.\nThis is useful for running multiple services on the same machine and you want to separate them out by domain name.",
+      "search": "Search Virtual Machine…"
+    },
     "redirection-hosts": {
       "title": "Redirection Hosts",
       "empty": "There are no Redirection Hosts",

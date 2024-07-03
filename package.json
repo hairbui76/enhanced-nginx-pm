@@ -11,7 +11,7 @@
 		"build:client": "cd frontend && npm run build",
 		"dev:server": "cd backend && npm start",
 		"dev": "npm run build:client && npm run dev:server",
-		"prepare:client": "cd frontend && npm i",
+		"prepare:client": "cd frontend && npm i -f",
 		"prepare:server": "cd backend && npm i",
 		"prepare": "npm run prepare:client && npm run prepare:server"
   },

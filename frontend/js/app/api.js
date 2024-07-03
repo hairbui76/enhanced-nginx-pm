@@ -92,6 +92,63 @@ function fetch(verb, path, data, options) {
     });
 }
 
+//New function replace ajax
+// function fetch(verb, path, data, options = {}) {
+
+//     return new Promise((resolve, reject) => {
+//         const api_url = '/api/';
+//         const url = api_url + path;
+//         const token = Tokens.getTopToken();
+
+//         const headers = new Headers({
+//             'Authorization': 'Bearer ' + (token ? token.t : null),
+//             'Content-Type': options.contentType || 'application/json; charset=UTF-8'
+//         });
+
+//         const fetchOptions = {
+//             method: verb,
+//             headers: headers,
+//             credentials: 'include',
+//             timeout: options.timeout ? options.timeout : 180000
+//         };
+
+//         if (typeof options.contentType === 'undefined' || options.contentType.match(/json/im)) {
+//             if (typeof data === 'object') {
+//                 fetchOptions.body = JSON.stringify(data);
+//             } else {
+//                 fetchOptions.body = data;
+//             }
+//         }
+
+//         fetch(url, fetchOptions)
+//             .then(response => {
+//                 if (!response.ok) {
+//                     return response.json().then(err => {
+//                         let code = 400
+
+//                         const error = err.error ? err.error.message : response.statusText;
+//                         code = err.error ? err.error.code || 500 : response.status;
+//                         throw new ApiError(error, err, code);
+//                     });
+//                 }
+//                 const total = response.headers.get('X-Dataset-Total');
+//                 if (total !== null) {
+//                     return response.json().then(data => ({
+//                         data: data,
+//                         pagination: {
+//                             total: parseInt(total, 10),
+//                             offset: parseInt(response.headers.get('X-Dataset-Offset'), 10),
+//                             limit: parseInt(response.headers.get('X-Dataset-Limit'), 10)
+//                         }
+//                     }));
+//                 }
+//                 return response.json().then(data => resolve(data));
+//             })
+//             .catch(error => reject(error));
+//     });
+// }
+
+
 /**
  *
  * @param {Array} expand
