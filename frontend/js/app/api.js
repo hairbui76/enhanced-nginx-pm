@@ -32,121 +32,121 @@ ApiError.prototype = Object.create(Error.prototype, {
  * @param   {Object} [data]
  * @param   {Object} [options]
  * @returns {Promise}
- */
-function fetch(verb, path, data, options) {
-    options = options || {};
+//  */
+// function fetch(verb, path, data, options) {
+//     options = options || {};
 
-    return new Promise(function (resolve, reject) {
-        let api_url = '/api/';
-        let url     = api_url + path;
-        let token   = Tokens.getTopToken();
+//     return new Promise(function (resolve, reject) {
+//         let api_url = '/api/';
+//         let url     = api_url + path;
+//         let token   = Tokens.getTopToken();
 
-        if ((typeof options.contentType === 'undefined' || options.contentType.match(/json/im)) && typeof data === 'object') {
-            data = JSON.stringify(data);
-        }
-
-        $.ajax({
-            url:         url,
-            data:        typeof data === 'object' ? JSON.stringify(data) : data,
-            type:        verb,
-            dataType:    'json',
-            contentType: options.contentType || 'application/json; charset=UTF-8',
-            processData: options.processData || true,
-            crossDomain: true,
-            timeout:     options.timeout ? options.timeout : 180000,
-            xhrFields:   {
-                withCredentials: true
-            },
-
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + (token ? token.t : null));
-            },
-
-            success: function (data, textStatus, response) {
-                let total = response.getResponseHeader('X-Dataset-Total');
-                if (total !== null) {
-                    resolve({
-                        data:       data,
-                        pagination: {
-                            total:  parseInt(total, 10),
-                            offset: parseInt(response.getResponseHeader('X-Dataset-Offset'), 10),
-                            limit:  parseInt(response.getResponseHeader('X-Dataset-Limit'), 10)
-                        }
-                    });
-                } else {
-                    resolve(response);
-                }
-            },
-
-            error: function (xhr, status, error_thrown) {
-                let code = 400;
-
-                if (typeof xhr.responseJSON !== 'undefined' && typeof xhr.responseJSON.error !== 'undefined' && typeof xhr.responseJSON.error.message !== 'undefined') {
-                    error_thrown = xhr.responseJSON.error.message;
-                    code         = xhr.responseJSON.error.code || 500;
-                }
-
-                reject(new ApiError(error_thrown, xhr.responseText, code));
-            }
-        });
-    });
-}
-
-//New function replace ajax
-// function fetch(verb, path, data, options = {}) {
-
-//     return new Promise((resolve, reject) => {
-//         const api_url = '/api/';
-//         const url = api_url + path;
-//         const token = Tokens.getTopToken();
-
-//         const headers = new Headers({
-//             'Authorization': 'Bearer ' + (token ? token.t : null),
-//             'Content-Type': options.contentType || 'application/json; charset=UTF-8'
-//         });
-
-//         const fetchOptions = {
-//             method: verb,
-//             headers: headers,
-//             credentials: 'include',
-//             timeout: options.timeout ? options.timeout : 180000
-//         };
-
-//         if (typeof options.contentType === 'undefined' || options.contentType.match(/json/im)) {
-//             if (typeof data === 'object') {
-//                 fetchOptions.body = JSON.stringify(data);
-//             } else {
-//                 fetchOptions.body = data;
-//             }
+//         if ((typeof options.contentType === 'undefined' || options.contentType.match(/json/im)) && typeof data === 'object') {
+//             data = JSON.stringify(data);
 //         }
 
-//         fetch(url, fetchOptions)
-//             .then(response => {
-//                 if (!response.ok) {
-//                     return response.json().then(err => {
-//                         let code = 400
+//         $.ajax({
+//             url:         url,
+//             data:        typeof data === 'object' ? JSON.stringify(data) : data,
+//             type:        verb,
+//             dataType:    'json',
+//             contentType: options.contentType || 'application/json; charset=UTF-8',
+//             processData: options.processData || true,
+//             crossDomain: true,
+//             timeout:     options.timeout ? options.timeout : 180000,
+//             xhrFields:   {
+//                 withCredentials: true
+//             },
 
-//                         const error = err.error ? err.error.message : response.statusText;
-//                         code = err.error ? err.error.code || 500 : response.status;
-//                         throw new ApiError(error, err, code);
-//                     });
-//                 }
-//                 const total = response.headers.get('X-Dataset-Total');
+//             beforeSend: function (xhr) {
+//                 xhr.setRequestHeader('Authorization', 'Bearer ' + (token ? token.t : null));
+//             },
+
+//             success: function (data, textStatus, response) {
+//                 let total = response.getResponseHeader('X-Dataset-Total');
 //                 if (total !== null) {
-//                     return response.json().then(data => ({
-//                         data: data,
+//                     resolve({
+//                         data:       data,
 //                         pagination: {
-//                             total: parseInt(total, 10),
-//                             offset: parseInt(response.headers.get('X-Dataset-Offset'), 10),
-//                             limit: parseInt(response.headers.get('X-Dataset-Limit'), 10)
+//                             total:  parseInt(total, 10),
+//                             offset: parseInt(response.getResponseHeader('X-Dataset-Offset'), 10),
+//                             limit:  parseInt(response.getResponseHeader('X-Dataset-Limit'), 10)
 //                         }
-//                     }));
+//                     });
+//                 } else {
+//                     resolve(response);
 //                 }
-//                 return response.json().then(data => resolve(data));
-//             })
-//             .catch(error => reject(error));
+//             },
+
+//             error: function (xhr, status, error_thrown) {
+//                 let code = 400;
+
+//                 if (typeof xhr.responseJSON !== 'undefined' && typeof xhr.responseJSON.error !== 'undefined' && typeof xhr.responseJSON.error.message !== 'undefined') {
+//                     error_thrown = xhr.responseJSON.error.message;
+//                     code         = xhr.responseJSON.error.code || 500;
+//                 }
+
+//                 reject(new ApiError(error_thrown, xhr.responseText, code));
+//             }
+//         });
 //     });
 // }
+
+//New function replace ajax
+function fetchData(verb, path, data, options = {}) {
+
+    return new Promise((resolve, reject) => {
+        const api_url = '/api/';
+        const url = api_url + path;
+        const token = Tokens.getTopToken();
+
+        const headers = new Headers({
+            'Authorization': 'Bearer ' + (token ? token.t : null),
+            'Content-Type': options.contentType || 'application/json; charset=UTF-8'
+        });
+
+        const fetchOptions = {
+            method: verb,
+            headers: headers,
+            credentials: 'include',
+            timeout: options.timeout ? options.timeout : 180000
+        };
+
+        if (typeof options.contentType === 'undefined' || options.contentType.match(/json/im)) {
+            if (typeof data === 'object') {
+                fetchOptions.body = JSON.stringify(data);
+            } else {
+                fetchOptions.body = data;
+            }
+        }
+
+        fetch(url, fetchOptions)
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        let code = 400
+
+                        const error = err.error ? err.error.message : response.statusText;
+                        code = err.error ? err.error.code || 500 : response.status;
+                        throw new ApiError(error, err, code);
+                    });
+                }
+                const total = response.headers.get('X-Dataset-Total');
+                if (total !== null) {
+                    return response.json().then(data => ({
+                        data: data,
+                        pagination: {
+                            total: parseInt(total, 10),
+                            offset: parseInt(response.headers.get('X-Dataset-Offset'), 10),
+                            limit: parseInt(response.headers.get('X-Dataset-Limit'), 10)
+                        }
+                    }));
+                }
+                return response.json().then(data => resolve(data));
+            })
+            .catch(error => reject(error));
+    });
+}
 
 
 /**
@@ -180,7 +180,7 @@ function getAllObjects(path, expand, query) {
         params.push('query=' + query);
     }
 
-    return fetch('get', path + (params.length ? '?' + params.join('&') : ''));
+    return fetchData('get', path + (params.length ? '?' + params.join('&') : ''));
 }
 
 function FileUpload(path, fd) {
@@ -210,53 +210,95 @@ function FileUpload(path, fd) {
 }
 
 //ref : https://codepen.io/chrisdpratt/pen/RKxJNo
+// function DownloadFile(verb, path, filename) {
+//     return new Promise(function (resolve, reject) {
+//         let api_url = '/api/';
+//         let url = api_url + path;
+//         let token = Tokens.getTopToken();
+
+//         $.ajax({
+//             url: url,
+//             type: verb,
+//             crossDomain: true,
+//             xhrFields: {
+//                 withCredentials: true,
+//                 responseType: 'blob'
+//             },
+
+//             beforeSend: function (xhr) {
+//                 xhr.setRequestHeader('Authorization', 'Bearer ' + (token ? token.t : null));
+//             },
+
+//             success: function (data) {
+//                 var a = document.createElement('a');
+//                 var url = window.URL.createObjectURL(data);
+//                 a.href = url;
+//                 a.download = filename;
+//                 document.body.append(a);
+//                 a.click();
+//                 a.remove();
+//                 window.URL.revokeObjectURL(url);
+//             },
+
+//             error: function (xhr, status, error_thrown) {
+//                 let code = 400;
+
+//                 if (typeof xhr.responseJSON !== 'undefined' && typeof xhr.responseJSON.error !== 'undefined' && typeof xhr.responseJSON.error.message !== 'undefined') {
+//                     error_thrown = xhr.responseJSON.error.message;
+//                     code = xhr.responseJSON.error.code || 500;
+//                 }
+
+//                 reject(new ApiError(error_thrown, xhr.responseText, code));
+//             }
+//         });
+//     });
+// }
+
+//new function replace ajax
 function DownloadFile(verb, path, filename) {
     return new Promise(function (resolve, reject) {
         let api_url = '/api/';
         let url = api_url + path;
         let token = Tokens.getTopToken();
 
-        $.ajax({
-            url: url,
-            type: verb,
-            crossDomain: true,
-            xhrFields: {
-                withCredentials: true,
-                responseType: 'blob'
-            },
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + (token ? token.t : null));
 
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + (token ? token.t : null));
-            },
-
-            success: function (data) {
-                var a = document.createElement('a');
-                var url = window.URL.createObjectURL(data);
-                a.href = url;
-                a.download = filename;
-                document.body.append(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            },
-
-            error: function (xhr, status, error_thrown) {
-                let code = 400;
-
-                if (typeof xhr.responseJSON !== 'undefined' && typeof xhr.responseJSON.error !== 'undefined' && typeof xhr.responseJSON.error.message !== 'undefined') {
-                    error_thrown = xhr.responseJSON.error.message;
-                    code = xhr.responseJSON.error.code || 500;
-                }
-
-                reject(new ApiError(error_thrown, xhr.responseText, code));
+        fetch(url, {
+            method: verb,
+            headers: headers,
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    const error = err.error ? err.error.message : response.statusText;
+                    const code = err.error ? err.error.code || 500 : response.status;
+                    throw new ApiError(error, err, code);
+                });
             }
+            return response.blob();
+        })
+        .then(blob => {
+            var a = document.createElement('a');
+            var url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = filename;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+            resolve();
+        })
+        .catch(error => {
+            reject(new ApiError(error.message));
         });
     });
 }
 
 module.exports = {
     status: function () {
-        return fetch('get', '');
+        return fetchData('get', '');
     },
 
     Tokens: {
@@ -268,7 +310,7 @@ module.exports = {
          * @returns {Promise}
          */
         login: function (identity, secret, wipe) {
-            return fetch('post', 'tokens', {identity: identity, secret: secret})
+            return fetchData('post', 'tokens', {identity: identity, secret: secret})
                 .then(response => {
                     if (response.token) {
                         if (wipe) {
@@ -289,7 +331,7 @@ module.exports = {
          * @returns {Promise}
          */
         refresh: function () {
-            return fetch('get', 'tokens')
+            return fetchData('get', 'tokens')
                 .then(response => {
                     if (response.token) {
                         Tokens.setCurrentToken(response.token);
@@ -310,7 +352,7 @@ module.exports = {
          * @returns {Promise}
          */
         getById: function (user_id, expand) {
-            return fetch('get', 'users/' + user_id + (typeof expand === 'object' && expand.length ? '?expand=' + makeExpansionString(expand) : ''));
+            return fetchData('get', 'users/' + user_id + (typeof expand === 'object' && expand.length ? '?expand=' + makeExpansionString(expand) : ''));
         },
 
         /**
@@ -327,7 +369,7 @@ module.exports = {
          * @returns {Promise}
          */
         create: function (data) {
-            return fetch('post', 'users', data);
+            return fetchData('post', 'users', data);
         },
 
         /**
@@ -338,7 +380,7 @@ module.exports = {
         update: function (data) {
             let id = data.id;
             delete data.id;
-            return fetch('put', 'users/' + id, data);
+            return fetchData('put', 'users/' + id, data);
         },
 
         /**
@@ -346,7 +388,7 @@ module.exports = {
          * @returns {Promise}
          */
         delete: function (id) {
-            return fetch('delete', 'users/' + id);
+            return fetchData('delete', 'users/' + id);
         },
 
         /**
@@ -356,7 +398,7 @@ module.exports = {
          * @returns {Promise}
          */
         setPassword: function (id, auth) {
-            return fetch('put', 'users/' + id + '/auth', auth);
+            return fetchData('put', 'users/' + id + '/auth', auth);
         },
 
         /**
@@ -364,7 +406,7 @@ module.exports = {
          * @returns {Promise}
          */
         loginAs: function (id) {
-            return fetch('post', 'users/' + id + '/login');
+            return fetchData('post', 'users/' + id + '/login');
         },
 
         /**
@@ -374,7 +416,7 @@ module.exports = {
          * @returns {Promise}
          */
         setPermissions: function (id, perms) {
-            return fetch('put', 'users/' + id + '/permissions', perms);
+            return fetchData('put', 'users/' + id + '/permissions', perms);
         }
     },
 
@@ -394,7 +436,7 @@ module.exports = {
              * @param {Object}  data
              */
             create: function (data) {
-                return fetch('post', 'nginx/proxy-hosts', data);
+                return fetchData('post', 'nginx/proxy-hosts', data);
             },
 
             /**
@@ -405,7 +447,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/proxy-hosts/' + id, data);
+                return fetchData('put', 'nginx/proxy-hosts/' + id, data);
             },
 
             /**
@@ -413,7 +455,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/proxy-hosts/' + id);
+                return fetchData('delete', 'nginx/proxy-hosts/' + id);
             },
 
             /**
@@ -421,7 +463,7 @@ module.exports = {
              * @returns {Promise}
              */
             get: function (id) {
-                return fetch('get', 'nginx/proxy-hosts/' + id);
+                return fetchData('get', 'nginx/proxy-hosts/' + id);
             },
 
             /**
@@ -429,7 +471,7 @@ module.exports = {
              * @returns {Promise}
              */
             enable: function (id) {
-                return fetch('post', 'nginx/proxy-hosts/' + id + '/enable');
+                return fetchData('post', 'nginx/proxy-hosts/' + id + '/enable');
             },
 
             /**
@@ -437,7 +479,7 @@ module.exports = {
              * @returns {Promise}
              */
             disable: function (id) {
-                return fetch('post', 'nginx/proxy-hosts/' + id + '/disable');
+                return fetchData('post', 'nginx/proxy-hosts/' + id + '/disable');
             }
         },
 
@@ -455,7 +497,7 @@ module.exports = {
              * @param {Object}  data
              */
             create: function (data) {
-                return fetch('post', 'nginx/redirection-hosts', data);
+                return fetchData('post', 'nginx/redirection-hosts', data);
             },
 
             /**
@@ -466,7 +508,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/redirection-hosts/' + id, data);
+                return fetchData('put', 'nginx/redirection-hosts/' + id, data);
             },
 
             /**
@@ -474,7 +516,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/redirection-hosts/' + id);
+                return fetchData('delete', 'nginx/redirection-hosts/' + id);
             },
 
             /**
@@ -482,7 +524,7 @@ module.exports = {
              * @returns {Promise}
              */
             get: function (id) {
-                return fetch('get', 'nginx/redirection-hosts/' + id);
+                return fetchData('get', 'nginx/redirection-hosts/' + id);
             },
 
             /**
@@ -499,7 +541,7 @@ module.exports = {
              * @returns {Promise}
              */
             enable: function (id) {
-                return fetch('post', 'nginx/redirection-hosts/' + id + '/enable');
+                return fetchData('post', 'nginx/redirection-hosts/' + id + '/enable');
             },
 
             /**
@@ -507,7 +549,7 @@ module.exports = {
              * @returns {Promise}
              */
             disable: function (id) {
-                return fetch('post', 'nginx/redirection-hosts/' + id + '/disable');
+                return fetchData('post', 'nginx/redirection-hosts/' + id + '/disable');
             }
         },
 
@@ -525,7 +567,7 @@ module.exports = {
              * @param {Object}  data
              */
             create: function (data) {
-                return fetch('post', 'nginx/streams', data);
+                return fetchData('post', 'nginx/streams', data);
             },
 
             /**
@@ -536,7 +578,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/streams/' + id, data);
+                return fetchData('put', 'nginx/streams/' + id, data);
             },
 
             /**
@@ -544,7 +586,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/streams/' + id);
+                return fetchData('delete', 'nginx/streams/' + id);
             },
 
             /**
@@ -552,7 +594,7 @@ module.exports = {
              * @returns {Promise}
              */
             get: function (id) {
-                return fetch('get', 'nginx/streams/' + id);
+                return fetchData('get', 'nginx/streams/' + id);
             },
 
             /**
@@ -560,7 +602,7 @@ module.exports = {
              * @returns {Promise}
              */
             enable: function (id) {
-                return fetch('post', 'nginx/streams/' + id + '/enable');
+                return fetchData('post', 'nginx/streams/' + id + '/enable');
             },
 
             /**
@@ -568,7 +610,7 @@ module.exports = {
              * @returns {Promise}
              */
             disable: function (id) {
-                return fetch('post', 'nginx/streams/' + id + '/disable');
+                return fetchData('post', 'nginx/streams/' + id + '/disable');
             }
         },
 
@@ -586,7 +628,7 @@ module.exports = {
              * @param {Object}  data
              */
             create: function (data) {
-                return fetch('post', 'nginx/dead-hosts', data);
+                return fetchData('post', 'nginx/dead-hosts', data);
             },
 
             /**
@@ -597,7 +639,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/dead-hosts/' + id, data);
+                return fetchData('put', 'nginx/dead-hosts/' + id, data);
             },
 
             /**
@@ -605,7 +647,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/dead-hosts/' + id);
+                return fetchData('delete', 'nginx/dead-hosts/' + id);
             },
 
             /**
@@ -613,7 +655,7 @@ module.exports = {
              * @returns {Promise}
              */
             get: function (id) {
-                return fetch('get', 'nginx/dead-hosts/' + id);
+                return fetchData('get', 'nginx/dead-hosts/' + id);
             },
 
             /**
@@ -630,7 +672,7 @@ module.exports = {
              * @returns {Promise}
              */
             enable: function (id) {
-                return fetch('post', 'nginx/dead-hosts/' + id + '/enable');
+                return fetchData('post', 'nginx/dead-hosts/' + id + '/enable');
             },
 
             /**
@@ -638,7 +680,7 @@ module.exports = {
              * @returns {Promise}
              */
             disable: function (id) {
-                return fetch('post', 'nginx/dead-hosts/' + id + '/disable');
+                return fetchData('post', 'nginx/dead-hosts/' + id + '/disable');
             }
         },
 
@@ -656,7 +698,7 @@ module.exports = {
              * @param {Object}  data
              */
             create: function (data) {
-                return fetch('post', 'nginx/access-lists', data);
+                return fetchData('post', 'nginx/access-lists', data);
             },
 
             /**
@@ -667,7 +709,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/access-lists/' + id, data);
+                return fetchData('put', 'nginx/access-lists/' + id, data);
             },
 
             /**
@@ -675,7 +717,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/access-lists/' + id);
+                return fetchData('delete', 'nginx/access-lists/' + id);
             }
         },
 
@@ -695,7 +737,7 @@ module.exports = {
             create: function (data) {
 
                 const timeout = 180000 + (data && data.meta && data.meta.propagation_seconds ? Number(data.meta.propagation_seconds) * 1000 : 0);
-                return fetch('post', 'nginx/certificates', data, {timeout});
+                return fetchData('post', 'nginx/certificates', data, {timeout});
             },
 
             /**
@@ -706,7 +748,7 @@ module.exports = {
             update: function (data) {
                 let id = data.id;
                 delete data.id;
-                return fetch('put', 'nginx/certificates/' + id, data);
+                return fetchData('put', 'nginx/certificates/' + id, data);
             },
 
             /**
@@ -714,7 +756,7 @@ module.exports = {
              * @returns {Promise}
              */
             delete: function (id) {
-                return fetch('delete', 'nginx/certificates/' + id);
+                return fetchData('delete', 'nginx/certificates/' + id);
             },
 
             /**
@@ -739,7 +781,7 @@ module.exports = {
              * @returns {Promise}
              */
             renew: function (id, timeout = 180000) {
-                return fetch('post', 'nginx/certificates/' + id + '/renew', undefined, {timeout});
+                return fetchData('post', 'nginx/certificates/' + id + '/renew', undefined, {timeout});
             },
 
             /**
@@ -747,7 +789,7 @@ module.exports = {
              * @returns {Promise}
              */
             testHttpChallenge: function (domains) {
-                return fetch('get', 'nginx/certificates/test-http?' + new URLSearchParams({
+                return fetchData('get', 'nginx/certificates/test-http?' + new URLSearchParams({
                     domains: JSON.stringify(domains),
                 }));
             },
@@ -779,7 +821,7 @@ module.exports = {
          * @returns {Promise}
          */
         getHostStats: function () {
-            return fetch('get', 'reports/hosts');
+            return fetchData('get', 'reports/hosts');
         }
     },
 
@@ -790,7 +832,7 @@ module.exports = {
          * @returns {Promise}
          */
         getById: function (setting_id) {
-            return fetch('get', 'settings/' + setting_id);
+            return fetchData('get', 'settings/' + setting_id);
         },
 
         /**
@@ -808,7 +850,7 @@ module.exports = {
         update: function (data) {
             let id = data.id;
             delete data.id;
-            return fetch('put', 'settings/' + id, data);
+            return fetchData('put', 'settings/' + id, data);
         }
     }
 };
