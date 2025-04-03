@@ -1,5 +1,5 @@
 const migrate_name = 'identifier_for_migrate';
-const logger       = require('../logger').migrate;
+const logger = require('../logger').migrate;
 
 /**
  * Migrate
@@ -11,7 +11,6 @@ const logger       = require('../logger').migrate;
  * @returns {Promise}
  */
 exports.up = function (knex, Promise) {
-
 	logger.info('[' + migrate_name + '] Migrating Up...');
 
 	// Create Table example:

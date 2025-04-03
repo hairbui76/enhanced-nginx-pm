@@ -1,6 +1,6 @@
-const db     = require('../db');
+const db = require('../db');
 const config = require('../lib/config');
-const Model  = require('objection').Model;
+const Model = require('objection').Model;
 
 Model.knex(db);
 

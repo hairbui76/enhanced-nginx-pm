@@ -1,13 +1,12 @@
-const _          = require('lodash');
-const exec       = require('child_process').exec;
-const execFile   = require('child_process').execFile;
+const _ = require('lodash');
+const exec = require('child_process').exec;
+const execFile = require('child_process').execFile;
 const { Liquid } = require('liquidjs');
-const logger     = require('../logger').global;
-const error      = require('./error');
+const logger = require('../logger').global;
+const error = require('./error');
 
 module.exports = {
-
-	exec: async function(cmd, options = {}) {
+	exec: async function (cmd, options = {}) {
 		logger.debug('CMD:', cmd);
 
 		const { stdout, stderr } = await new Promise((resolve, reject) => {
@@ -35,7 +34,7 @@ module.exports = {
 		// logger.debug('CMD: ' + cmd + ' ' + (args ? args.join(' ') : ''));
 
 		return new Promise((resolve, reject) => {
-			execFile(cmd, args, function (err, stdout, /*stderr*/) {
+			execFile(cmd, args, function (err, stdout /*stderr*/) {
 				if (err && typeof err === 'object') {
 					reject(err);
 				} else {
@@ -85,7 +84,7 @@ module.exports = {
 	 */
 	getRenderEngine: function () {
 		const renderEngine = new Liquid({
-			root: __dirname + '/../templates/'
+			root: __dirname + '/../templates/',
 		});
 
 		/**
@@ -102,5 +101,5 @@ module.exports = {
 		});
 
 		return renderEngine;
-	}
+	},
 };

@@ -10,17 +10,17 @@ function generateDbConfig() {
 		return cfg.knex;
 	}
 	return {
-		client:     cfg.engine,
+		client: cfg.engine,
 		connection: {
-			host:     cfg.host,
-			user:     cfg.user,
+			host: cfg.host,
+			user: cfg.user,
 			password: cfg.password,
 			database: cfg.name,
-			port:     cfg.port
+			port: cfg.port,
 		},
 		migrations: {
-			tableName: 'migrations'
-		}
+			tableName: 'migrations',
+		},
 	};
 }
 

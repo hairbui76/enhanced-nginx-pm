@@ -8,14 +8,18 @@
     "test": "test"
   },
   "scripts": {
-		"build:client": "cd frontend && npm run build",
-		"dev:server": "cd backend && npm start",
-		"dev": "npm run build:client && npm run dev:server",
-		"prepare:client": "cd frontend && npm i -f",
-		"prepare:server": "cd backend && npm i",
-		"prepare": "npm run prepare:client && npm run prepare:server"
+    "build:client": "cd frontend && npm run build",
+    "dev:server": "cd backend && npm start",
+    "dev": "npm run build:client && npm run dev:server",
+    "prepare:client": "cd frontend && npm i -f",
+    "prepare:server": "cd backend && npm i",
+    "prepare": "npm run prepare:client && npm run prepare:server"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "prettier": "^3.4.2"
+  }
 }

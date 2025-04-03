@@ -2,22 +2,22 @@
 
 const logger = require('./logger').global;
 
-async function appStart () {
-	const migrate             = require('./migrate');
-	const setup               = require('./setup');
-	const app                 = require('./app');
-	const apiValidator        = require('./lib/validator/api');
+async function appStart() {
+	const migrate = require('./migrate');
+	const setup = require('./setup');
+	const app = require('./app');
+	const apiValidator = require('./lib/validator/api');
 	const internalCertificate = require('./internal/certificate');
-	const internalIpRanges    = require('./internal/ip_ranges');
+	const internalIpRanges = require('./internal/ip_ranges');
 
-	return migrate.latest()
+	return migrate
+		.latest()
 		.then(setup)
 		.then(() => {
 			return apiValidator.loadSchemas;
 		})
 		.then(internalIpRanges.fetch)
 		.then(() => {
-
 			internalCertificate.initTimer();
 			internalIpRanges.initTimer();
 
@@ -45,4 +45,3 @@ try {
 	logger.error(err.message, err);
 	process.exit(1);
 }
-

@@ -1,7 +1,6 @@
 const moment = require('moment');
 
 module.exports = {
-
 	/**
 	 * Takes an expression such as 30d and returns a moment object of that date in future
 	 *
@@ -27,6 +26,5 @@ module.exports = {
 		}
 
 		return null;
-	}
-
+	},
 };
